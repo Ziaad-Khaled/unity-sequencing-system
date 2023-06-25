@@ -782,6 +782,7 @@ MonoBehaviour:
     cameraEndPosition: {x: 0, y: 1.5, z: -3}
     waitForAnimation: 1
     waitForAudio: 0
+    disableObjectAfterAction: 0
   - animationClip: {fileID: -203655887218126122, guid: 5f26412c191496b468205dbd405d7ceb, type: 3}
     audioClip: {fileID: 8300000, guid: 737addeba4be3ef4c823a256162b267e, type: 3}
     targetObject: {fileID: 1078161246}
@@ -789,6 +790,7 @@ MonoBehaviour:
     cameraEndPosition: {x: 0, y: 0, z: 0}
     waitForAnimation: 1
     waitForAudio: 1
+    disableObjectAfterAction: 1
   playerAnimator: {fileID: 1078161252}
   audioSource: {fileID: 2077812667}
   virtualCameraTransform: {fileID: 6322063}

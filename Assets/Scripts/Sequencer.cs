@@ -12,6 +12,7 @@ public class Sequencer : MonoBehaviour
         public Vector3 cameraEndPosition;
         public bool waitForAnimation;
         public bool waitForAudio;
+        public bool disableObjectAfterAction;
     }
 
     public SequenceAction[] sequenceActions;
@@ -19,6 +20,7 @@ public class Sequencer : MonoBehaviour
     public AudioSource audioSource;
     public Transform virtualCameraTransform;
     public float cameraMoveDuration = 2f;
+    
 
     private int currentIndex;
 
@@ -62,7 +64,7 @@ public class Sequencer : MonoBehaviour
             cameraCoroutine = StartCoroutine(MoveCamera(action.cameraStartPosition, action.cameraEndPosition));
         }
 
-        // Wait for both animation and audio to finish if necessary
+
         if (action.waitForAnimation && animationCoroutine != null)
         {
             yield return animationCoroutine;
@@ -78,7 +80,10 @@ public class Sequencer : MonoBehaviour
             yield return cameraCoroutine;
         }
 
-        // Rest of the code for other actions (game object, camera movement)
+        if (action.disableObjectAfterAction && action.targetObject != null)
+        {
+            action.targetObject.SetActive(false);
+        }
 
         currentIndex++;
         ExecuteSequence();
