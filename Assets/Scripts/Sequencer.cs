@@ -42,48 +42,46 @@ public class Sequencer : MonoBehaviour
 
     private System.Collections.IEnumerator ExecuteAction(SequenceAction action)
     {
+        Coroutine animationCoroutine = null;
+        Coroutine audioCoroutine = null;
+
         if (action.animationClip != null)
         {
-            playerAnimator.Play(action.animationClip.name);
-
-            if (action.waitForAnimation)
-            {
-                yield return new WaitForSeconds(action.animationClip.length);
-            }
+            animationCoroutine = StartCoroutine(PlayAnimation(action.animationClip));
         }
 
         if (action.audioClip != null)
         {
-            audioSource.clip = action.audioClip;
-            audioSource.Play();
-
-            if (action.waitForAudio)
-            {
-                yield return new WaitForSeconds(action.audioClip.length);
-            }
+            audioCoroutine = StartCoroutine(PlayAudio(action.audioClip));
         }
 
-        if (action.targetObject != null)
+        // Wait for both animation and audio to finish if necessary
+        if (action.waitForAnimation && animationCoroutine != null)
         {
-            //action.targetObject.SetActive(!action.targetObject.activeSelf);
+            yield return animationCoroutine;
         }
 
-        if (action.cameraStartPosition != Vector3.zero && action.cameraEndPosition != Vector3.zero)
+        if (action.waitForAudio && audioCoroutine != null)
         {
-            float elapsedTime = 0f;
-
-            while (elapsedTime < cameraMoveDuration)
-            {
-                virtualCameraTransform.position = Vector3.Lerp(action.cameraStartPosition, action.cameraEndPosition, elapsedTime / cameraMoveDuration);
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-
-            // Ensure the final position is set precisely
-            virtualCameraTransform.position = action.cameraEndPosition;
+            yield return audioCoroutine;
         }
+
+        // Rest of the code for other actions (game object, camera movement)
 
         currentIndex++;
         ExecuteSequence();
+    }
+
+    private System.Collections.IEnumerator PlayAnimation(AnimationClip animationClip)
+    {
+        playerAnimator.Play(animationClip.name);
+        yield return new WaitForSeconds(animationClip.length);
+    }
+
+    private System.Collections.IEnumerator PlayAudio(AudioClip audioClip)
+    {
+        audioSource.clip = audioClip;
+        audioSource.Play();
+        yield return new WaitForSeconds(audioClip.length);
     }
 }
