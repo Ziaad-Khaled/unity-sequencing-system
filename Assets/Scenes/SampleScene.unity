@@ -779,9 +779,9 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: cceaef8b9aa58154c98bae5187cf1cd8, type: 3}
     targetObject: {fileID: 1078161246}
     cameraStartPosition: {x: 0, y: 1.5, z: -10}
-    cameraEndPosition: {x: 0, y: 1, z: -2}
+    cameraEndPosition: {x: 0, y: 1.5, z: -3}
     waitForAnimation: 1
-    waitForAudio: 1
+    waitForAudio: 0
   - animationClip: {fileID: -203655887218126122, guid: 5f26412c191496b468205dbd405d7ceb, type: 3}
     audioClip: {fileID: 8300000, guid: 737addeba4be3ef4c823a256162b267e, type: 3}
     targetObject: {fileID: 1078161246}
@@ -792,7 +792,7 @@ MonoBehaviour:
   playerAnimator: {fileID: 1078161252}
   audioSource: {fileID: 2077812667}
   virtualCameraTransform: {fileID: 6322063}
-  cameraMoveDuration: 2
+  cameraMoveDuration: 3
 --- !u!1 &1078161246 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4416926081852918481, guid: 64dce48905ffd9b4293e595fa6941544, type: 3}

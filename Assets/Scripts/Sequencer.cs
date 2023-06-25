@@ -44,6 +44,7 @@ public class Sequencer : MonoBehaviour
     {
         Coroutine animationCoroutine = null;
         Coroutine audioCoroutine = null;
+        Coroutine cameraCoroutine = null;
 
         if (action.animationClip != null)
         {
@@ -55,6 +56,12 @@ public class Sequencer : MonoBehaviour
             audioCoroutine = StartCoroutine(PlayAudio(action.audioClip));
         }
 
+        // Start camera movement coroutine immediately
+        if (action.cameraStartPosition != Vector3.zero && action.cameraEndPosition != Vector3.zero)
+        {
+            cameraCoroutine = StartCoroutine(MoveCamera(action.cameraStartPosition, action.cameraEndPosition));
+        }
+
         // Wait for both animation and audio to finish if necessary
         if (action.waitForAnimation && animationCoroutine != null)
         {
@@ -64,6 +71,11 @@ public class Sequencer : MonoBehaviour
         if (action.waitForAudio && audioCoroutine != null)
         {
             yield return audioCoroutine;
+        }
+
+        if (cameraCoroutine != null)
+        {
+            yield return cameraCoroutine;
         }
 
         // Rest of the code for other actions (game object, camera movement)
@@ -83,5 +95,21 @@ public class Sequencer : MonoBehaviour
         audioSource.clip = audioClip;
         audioSource.Play();
         yield return new WaitForSeconds(audioClip.length);
+    }
+
+    private System.Collections.IEnumerator MoveCamera(Vector3 startPosition, Vector3 endPosition)
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < cameraMoveDuration)
+        {
+            float t = elapsedTime / cameraMoveDuration;
+            virtualCameraTransform.position = Vector3.Lerp(startPosition, endPosition, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure the final position is set precisely
+        virtualCameraTransform.position = endPosition;
     }
 }
